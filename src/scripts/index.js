@@ -151,7 +151,7 @@ const renderPage = async () => {
 if ('serviceWorker' in navigator && 'PushManager' in window) {
   window.addEventListener('load', async () => {
     try {
-      const reg = await navigator.serviceWorker.register('/sw.js');
+      const reg = await navigator.serviceWorker.register('./sw.js');
       console.log('✅ Service Worker terdaftar:', reg);
 
       if (Notification.permission === 'granted') {
