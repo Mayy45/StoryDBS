@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Offline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      background-color: #f0f0f0;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #333;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #555;
+    }
+    .retry-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .retry-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kamu sedang offline</h1>
+  <p>Silakan periksa koneksi internetmu dan coba lagi.</p>
+  <button class="retry-button" onclick="location.reload()">Coba Lagi</button>
+</body>
+</html>
