@@ -1,5 +1,6 @@
 import AddStoryModel from '../../models/add-story-model.js';
 import AddStoryView from './add-story-view.js';
+import CONFIG from '../../config.js';
 
 export default class AddStoryPresenter {
   constructor() {
@@ -32,16 +33,30 @@ export default class AddStoryPresenter {
         lon,
       });
 
-      this.view.showMessage(result.message);
+  this.view.showMessage(result.message);
 
-      // 🔔 Tampilkan notifikasi lokal jika diizinkan
-      if (Notification.permission === 'granted') {
-        new Notification('Cerita berhasil ditambahkan!', {
-          body: result.message,
-          icon: './icons/placeholder.png', // Ganti dengan ikon yang tersedia di proyekmu
-        });
-      }
 
+  await fetch(`/v1/notifications/send`, {
+      method: 'POST', 
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.token}`,
+      },
+      body: JSON.stringify({
+        title: 'Story berhasil dibuat',
+        options: {
+          body: `Anda telah membuat story baru dengan deskripsi: ${description}`,
+          icon: "./icons/icon-192x192.png",
+          badge: './icons/icon-72x72.png',
+          vibrate: [100, 50, 100],
+          data: {
+            url: '/', 
+        }
+        },
+      }),
+    });
+
+   
       setTimeout(() => {
         window.location.hash = '/';
       }, 1500);

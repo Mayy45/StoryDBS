@@ -1,21 +1,30 @@
 const CACHE_NAME = 'v1-app-shell';
 const APP_SHELL = [
   '/',
-  '/index.html',
-  '/offline.html',
-  '/styles/styles.css',
-  '/manifest.webmanifest',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  './index.html',
+  './offline.html',
+  './styles/styles.css',
+  './manifest.webmanifest',
+  './icons/icon-192x192.png',
+  './icons/icon-512x512.png',
 ];
 
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      for (const url of APP_SHELL) {
+        try {
+          await cache.add(url);
+        } catch (error) {
+          console.error('Gagal cache:', url, error);
+        }
+      }
+    })
   );
   self.skipWaiting();
 });
+
 
 
 self.addEventListener('activate', (event) => {
@@ -35,23 +44,22 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
 
-  // Hanya proses jika request http/https dan method-nya GET
+  
   if ((requestUrl.protocol === 'http:' || requestUrl.protocol === 'https:') && event.request.method === 'GET') {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
-        // Jika ada di cache, kembalikan
         if (cachedResponse) {
           return cachedResponse;
         }
 
-        // Jika tidak, fetch dan cache
+       
         return fetch(event.request).then((networkResponse) => {
           return caches.open('my-cache').then((cache) => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
           });
         });
-      }).catch(() => caches.match('/offline.html')) // fallback jika offline
+      }).catch(() => caches.match('/offline.html')) 
     );
   }
 });
@@ -61,11 +69,11 @@ let lastNotificationKey = '';
 self.addEventListener('push', (event) => {
   event.waitUntil((async () => {
     let payload = {
-      title: 'Notifikasi',
+      title: 'Story berhasil dibuat',
       options: {
-        body: 'Ada notifikasi baru!',
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-72x72.png',
+        body: "Anda telah membuat story baru dengan deskripsi: Belajar push notification hari ini.",
+        icon: "./icons/icon-192x192.png",
+        badge: './icons/icon-72x72.png',
         vibrate: [100, 50, 100],
         data: {
           url: '/', 

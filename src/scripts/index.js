@@ -27,7 +27,6 @@ const updateNavigationMenu = () => {
     registerLink.style.display = isUserLoggedIn ? 'none' : 'block';
     logoutLink.style.display = isUserLoggedIn ? 'block' : 'none';
 
-    // Hapus dulu listener lama agar tidak bertumpuk
     logoutLink.replaceWith(logoutLink.cloneNode(true));
     const newLogoutLink = document.getElementById('logout-link');
 
@@ -152,13 +151,13 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
   window.addEventListener('load', async () => {
     try {
       const reg = await navigator.serviceWorker.register('./sw.js');
-      console.log('✅ Service Worker terdaftar:', reg);
+      console.log('Service Worker terdaftar:', reg);
 
       if (Notification.permission === 'granted') {
         await initPush();
       }
     } catch (err) {
-      console.error('❌ Registrasi Service Worker gagal:', err);
+      console.error('Registrasi Service Worker gagal:', err);
     }
   });
 }

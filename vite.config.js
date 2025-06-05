@@ -10,6 +10,7 @@ export default defineConfig({
         target: 'https://story-api.dicoding.dev',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/v1/, '/v1'),
+        secure: true
       },
     },
   },
@@ -32,6 +33,7 @@ export default defineConfig({
         name: 'Story APP',
         short_name: 'My Story',
         start_url: '/',
+        scope: '/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#42b883',

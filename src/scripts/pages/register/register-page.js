@@ -143,7 +143,6 @@ showSuccess(message) {
     title: 'Saved!',
     text: message,
     showConfirmButton: false,
-    didOpen: () => Swal.showLoading()
   });
 }
 

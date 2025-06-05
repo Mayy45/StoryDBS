@@ -26,7 +26,7 @@ export async function getStories() {
     return await response.json();
   } catch (error) {
     console.error('Gagal mengambil data cerita:', error);
-    return { listStory: [] }; // Menangani error dengan menyediakan array kosong
+    return { listStory: [] };
   }
 }
 
@@ -56,7 +56,7 @@ export async function addStory({ description, photo, lat, lon }) {
     return result;
   } catch (error) {
     console.error('Gagal menambahkan cerita:', error);
-    return null; // Menangani error dengan mengembalikan null
+    return null; 
   }
 }
 
