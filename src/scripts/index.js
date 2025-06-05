@@ -27,6 +27,7 @@ const updateNavigationMenu = () => {
     registerLink.style.display = isUserLoggedIn ? 'none' : 'block';
     logoutLink.style.display = isUserLoggedIn ? 'block' : 'none';
 
+    // Hapus dulu listener lama agar tidak bertumpuk
     logoutLink.replaceWith(logoutLink.cloneNode(true));
     const newLogoutLink = document.getElementById('logout-link');
 

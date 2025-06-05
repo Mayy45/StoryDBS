@@ -36,8 +36,8 @@ export default class AddStoryPresenter {
   this.view.showMessage(result.message);
 
 
-  await fetch(`/v1/notifications/send`, {
-      method: 'POST', 
+  await fetch(`${CONFIG.BASE_URL}/notifications/send`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${this.token}`,
