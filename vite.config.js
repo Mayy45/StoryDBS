@@ -10,7 +10,6 @@ export default defineConfig({
         target: 'https://story-api.dicoding.dev',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/v1/, '/v1'),
-        secure: true
       },
     },
   },
@@ -75,7 +74,7 @@ export default defineConfig({
         cacheName: 'static-resources',
       },
     },
-    // Tambahkan rule berikut untuk API Dicoding:
+    
     {
       urlPattern: /^https:\/\/story-api\.dicoding\.dev\/v1\/.*/,
       handler: 'NetworkFirst',
@@ -90,7 +89,6 @@ export default defineConfig({
   ],
   navigateFallback: 'index.html',
 },
-
     }),
   ],
 });

@@ -14,7 +14,6 @@ const app = new App({
   navigationDrawer: document.querySelector('#navigation-drawer'),
 });
 
-
 const updateNavigationMenu = () => {
   const isUserLoggedIn = !!localStorage.getItem('token');
 
@@ -27,9 +26,8 @@ const updateNavigationMenu = () => {
     registerLink.style.display = isUserLoggedIn ? 'none' : 'block';
     logoutLink.style.display = isUserLoggedIn ? 'block' : 'none';
 
-    // Hapus dulu listener lama agar tidak bertumpuk
-    logoutLink.replaceWith(logoutLink.cloneNode(true));
-    const newLogoutLink = document.getElementById('logout-link');
+    const newLogoutLink = logoutLink.cloneNode(true);
+    logoutLink.parentNode.replaceChild(newLogoutLink, logoutLink);
 
     newLogoutLink.addEventListener('click', async () => {
       const result = await Swal.fire({
@@ -45,9 +43,7 @@ const updateNavigationMenu = () => {
       if (result.isConfirmed) {
         Swal.fire({
           title: 'Melakukan logout...',
-          didOpen: () => {
-            Swal.showLoading();
-          },
+          didOpen: () => Swal.showLoading(),
           allowOutsideClick: false,
           allowEscapeKey: false,
           showConfirmButton: false
@@ -56,7 +52,7 @@ const updateNavigationMenu = () => {
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         localStorage.removeItem('token');
-        updateNavigationMenu();
+        localStorage.removeItem('subscriptionSent'); // reset flag notifikasi
 
         Swal.fire({
           title: 'Berhasil logout!',
@@ -65,18 +61,15 @@ const updateNavigationMenu = () => {
           showConfirmButton: false,
           allowEscapeKey: false,
         }).then(() => {
+          window.location.hash = '/';
           window.location.reload();
         });
-
-        window.location.hash = '/';
       }
     });
   }
 };
 
-
 document.addEventListener('DOMContentLoaded', async () => {
-  
   const skipLink = document.querySelector('.skip-link');
   if (skipLink) {
     skipLink.addEventListener('click', (e) => {
@@ -86,7 +79,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       mainContent.scrollIntoView({ behavior: 'smooth' });
     });
   }
-
 
   const subscribeBtn = document.getElementById('btn-subscribe');
   const unsubscribeBtn = document.getElementById('btn-unsubscribe');
@@ -125,10 +117,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  renderPage();
+  await renderPage();
   window.addEventListener('hashchange', renderPage);
 });
-
 
 const renderPage = async () => {
   const activeRoute = getActiveRoute(window.location.hash);
@@ -162,5 +153,3 @@ if ('serviceWorker' in navigator && 'PushManager' in window) {
     }
   });
 }
-
-

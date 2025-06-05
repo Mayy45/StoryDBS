@@ -33,30 +33,10 @@ export default class AddStoryPresenter {
         lon,
       });
 
-  this.view.showMessage(result.message);
+      this.view.showMessage(result.message);
 
+      await this.sendPushNotification(description);
 
-  await fetch(`${CONFIG.BASE_URL}/notifications/send`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.token}`,
-      },
-      body: JSON.stringify({
-        title: 'Story berhasil dibuat',
-        options: {
-          body: `Anda telah membuat story baru dengan deskripsi: ${description}`,
-          icon: "./icons/icon-192x192.png",
-          badge: './icons/icon-72x72.png',
-          vibrate: [100, 50, 100],
-          data: {
-            url: '/', 
-        }
-        },
-      }),
-    });
-
-   
       setTimeout(() => {
         window.location.hash = '/';
       }, 1500);
@@ -64,4 +44,37 @@ export default class AddStoryPresenter {
       this.view.showMessage(error.message, true);
     }
   }
+
+  async sendPushNotification(description) {
+  if (!('serviceWorker' in navigator)) return;
+
+  try {
+    const registration = await navigator.serviceWorker.ready;
+
+    const payload = {
+      title: 'Story berhasil dibuat',
+      options: {
+        body: `Anda telah membuat story baru dengan deskripsi: ${description}`,
+        icon: './icons/icon-192x192.png',
+        badge: './icons/icon-72x72.png',
+        vibrate: [100, 50, 100],
+        data: { url: '/' },
+      }
+    };
+
+    await fetch(`${CONFIG.NOTIF_BASE_URL}/stories`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.token}`,
+      },
+      body: JSON.stringify({
+        title: payload.title,
+        description,
+      }),
+    });
+  } catch (err) {
+    console.error('❌ Gagal kirim notifikasi:', err);
+  }
+}
 }
