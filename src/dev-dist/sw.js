@@ -67,7 +67,7 @@ if (!self.define) {
     });
   };
 }
-define(['./workbox-dd6feabc'], (function (workbox) { 'use strict';
+define(['./workbox-e8ef6081'], (function (workbox) { 'use strict';
 
   self.skipWaiting();
   workbox.clientsClaim();
@@ -79,13 +79,13 @@ define(['./workbox-dd6feabc'], (function (workbox) { 'use strict';
    */
   workbox.precacheAndRoute([{
     "url": "registerSW.js",
-    "revision": "3ca0b8505b4bec776b69afdba2768812"
+    "revision": "9b99cece4eedbc9bdb0b388ca4a34ac7"
   }, {
-    "url": "index.html",
-    "revision": "0.3vodddgbiho"
+    "url": "/StoryDBS/index.html",
+    "revision": "0.0hptm2ihaeo"
   }], {});
   workbox.cleanupOutdatedCaches();
-  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("index.html"), {
+  workbox.registerRoute(new workbox.NavigationRoute(workbox.createHandlerBoundToURL("/StoryDBS/index.html"), {
     allowlist: [/^\/$/]
   }));
   workbox.registerRoute(({
@@ -105,6 +105,13 @@ define(['./workbox-dd6feabc'], (function (workbox) { 'use strict';
   }) => url.origin === self.location.origin, new workbox.CacheFirst({
     "cacheName": "static-resources",
     plugins: []
+  }), 'GET');
+  workbox.registerRoute(/^https:\/\/story-api\.dicoding\.dev\/v1\/.*/, new workbox.NetworkFirst({
+    "cacheName": "api-cache",
+    "networkTimeoutSeconds": 3,
+    plugins: [new workbox.CacheableResponsePlugin({
+      statuses: [0, 200]
+    })]
   }), 'GET');
 
 }));

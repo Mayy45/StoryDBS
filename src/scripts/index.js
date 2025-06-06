@@ -5,6 +5,7 @@ import routes from './routes/routes';
 import Swal from 'sweetalert2';
 import { initPush } from './utils/push';
 import { unsubscribePush } from './utils/unsubscribe';
+import { registerSW } from 'virtual:pwa-register';
 
 let currentPresenter = null;
 
@@ -142,14 +143,21 @@ const renderPage = async () => {
 if ('serviceWorker' in navigator && 'PushManager' in window) {
   window.addEventListener('load', async () => {
     try {
-      const reg = await navigator.serviceWorker.register('./sw.js');
-      console.log('Service Worker terdaftar:', reg);
+      const updateSW = registerSW({
+        onRegistered(reg) {
+          console.log('Service Worker terdaftar:', reg);
+        },
+        onRegisterError(error) {
+          console.error('Registrasi Service Worker gagal:', error);
+        },
+      });
 
       if (Notification.permission === 'granted') {
         await initPush();
       }
     } catch (err) {
-      console.error('Registrasi Service Worker gagal:', err);
+      console.error('Registrasi SW (blok luar) gagal:', err);
     }
   });
 }
+

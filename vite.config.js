@@ -31,8 +31,8 @@ export default defineConfig({
       manifest: {
         name: 'Story APP',
         short_name: 'My Story',
-        start_url: '/',
-        scope: '/',
+        start_url: '/StoryDBS/',
+        scope: '/StoryDBS/',
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#42b883',
@@ -74,7 +74,7 @@ export default defineConfig({
         cacheName: 'static-resources',
       },
     },
-    
+
     {
       urlPattern: /^https:\/\/story-api\.dicoding\.dev\/v1\/.*/,
       handler: 'NetworkFirst',

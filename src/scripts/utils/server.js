@@ -40,15 +40,12 @@ app.post('/stories', async (req, res) => {
   console.log(`📘 Story baru disimpan: ${title} - ${description}`);
 
   const payload = JSON.stringify({
-    title: 'Story berhasil dibuat!',
-    options: {
-      body: `Judul: ${title}\nDeskripsi: ${description}`,
-      icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-72x72.png',
-      data: { url: '/' },
-      vibrate: [200, 100, 200]
-    }
-  });
+  title: 'Story berhasil dibuat!',
+  options: {
+    body: `Judul: ${title}\nDeskripsi: ${description}`,
+    data: { url: '/' }
+  }
+});
 
   const failedEndpoints = [];
 
@@ -76,4 +73,26 @@ app.post('/stories', async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Server berjalan di http://localhost:${PORT}`);
+});
+
+app.get('/push-test', async (req, res) => {
+  const payload = JSON.stringify({
+    title: 'Tes Push Manual',
+    options: {
+      body: 'Ini adalah notifikasi percobaan manual.',
+      data: { url: '/' }
+    }
+  });
+
+  await Promise.all(
+    subscriptions.map(async (sub) => {
+      try {
+        await webpush.sendNotification(sub, payload);
+      } catch (err) {
+        console.error('Gagal kirim notifikasi tes:', err);
+      }
+    })
+  );
+
+  res.send('Push test dikirim.');
 });
